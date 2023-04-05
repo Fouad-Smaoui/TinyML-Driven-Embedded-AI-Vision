@@ -67,21 +67,9 @@ def generate_frames():
 def video_feed():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-
 # Define the index page route
 @app.route('/')
 def index():
     return render_template('index.html')
-
-
 if __name__ == '__main__':
-    # Load lipstick image
-
-    app.run(debug=True)
-
-
-
-if __name__ == '__main__':
-    # Load lipstick image
-
     app.run(debug=True)
