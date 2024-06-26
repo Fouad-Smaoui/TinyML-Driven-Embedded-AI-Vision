@@ -1,0 +1,4 @@
+[submodule "Real-Time-Industrial-AI-Monitoring-System"]
+    path = Real-Time-Industrial-AI-Monitoring-System
+    url = https://github.com/your-username/Real-Time-Industrial-AI-Monitoring-System.git
+    branch = main
