@@ -1,25 +1,119 @@
-# Facial Landmarks Tracking
+# Real-Time Industrial Monitoring and Optimization System
 
-This project is a Flask web application that tracks facial landmarks using OpenCV and dlib libraries.
+This project integrates real-time video processing, data analysis, AI-based facial recognition, optimization using a Kalman filter, IoT communication with an ESP32 microcontroller, and data visualization using Streamlit. Designed for industrial applications, this system provides real-time monitoring, data analysis, and optimized communication to enhance operational efficiency and decision-making.
 
-# Requirements
-Python 3.6+
-Flask
-OpenCV
-dlib
-# Installation
-1. Clone the repository to your local machine:
-    git clone https://github.com/your-username/facial-landmark-tracking.git
-2. Install the required Python packages:
+## Project Overview
+
+This project consists of several interconnected components:
+
+1. **Data Analysis using NumPy and Pandas**
+2. **AI and Computer Vision using Keras and OpenCV**
+3. **Kalman Filter for Optimization**
+4. **FreeRTOS on ESP32 with MQTT Communication Protocol**
+5. **Data Visualization using Streamlit**
+
+
+## Getting Started
+
+### Prerequisites
+
+Ensure you have the following installed:
+- Python 3.x
+- Flask
+- OpenCV
+- Dlib
+- Keras
+- NumPy
+- Pandas
+- Streamlit
+- Arduino IDE or ESP-IDF for ESP32 programming
+
+### Installation
+
+1. **Clone the repository:**
+    git clone https://github.com/Fouad-Smaoui/Real-Time-Industrial-AI-Monitoring-System.git
+    cd Real-Time-Industrial-AI-Monitoring-System
+
+2. **Install Python dependencies:**
     pip install -r requirements.txt
-3. Download the facial landmark predictor model from here and extract the contents to the project directory.
 
-# Usage
-1. Run the Flask application:
-    flask run
-2. Open a web browser and go to http://localhost:5000 to see the facial landmark tracking in action.
 
-# Files
-    app.py: The Flask application that tracks facial landmarks.
-    templates/index.html: The HTML template for the index page that displays the video feed.
-    shape_predictor_68_face_landmarks.dat: The facial landmark predictor model.
+3. **Set up the ESP32:**
+- Install Arduino IDE or ESP-IDF.
+- Connect your ESP32 to your computer.
+- Open `main.cpp` in the Arduino IDE.
+- Update the WiFi credentials and MQTT broker address.
+- Upload the code to the ESP32.
+
+### Running the Project
+
+1. **Run the Flask application:**
+    python app.py
+
+2. **Run the Jupyter notebook:**
+    jupyter notebook data_analysis.ipynb
+
+
+3. **Run the Streamlit application:**
+    streamlit run streamlit_app.py
+
+
+## Project Components
+
+### 1. Data Analysis using NumPy and Pandas
+
+**Jupyter Notebook: `data_analysis.ipynb`**
+
+This notebook demonstrates data analysis on industrial sensor data. It includes data cleaning, statistical analysis, and visualization.
+
+### 2. AI and Computer Vision using Keras and OpenCV
+
+**Flask Application: `app.py`**
+
+The Flask app captures video, detects faces, and recognizes facial features using a pre-trained Keras model. The results are displayed in real-time.
+
+### 3. Kalman Filter for Optimization
+
+**Python Script: `kalman_filter.py`**
+
+The Kalman filter script optimizes face tracking by predicting and correcting face positions.
+
+### 4. FreeRTOS on ESP32 with MQTT Communication Protocol
+
+**ESP32 Code: `main.cpp`**
+
+The ESP32 code configures WiFi, MQTT communication, and runs a FreeRTOS task to handle MQTT operations.
+
+### 5. Data Visualization using Streamlit
+
+**Streamlit Application: `streamlit_app.py`**
+
+The Streamlit app provides an interactive interface for data analysis and visualization.
+
+## Industrial Context
+
+This system is designed for industrial environments where real-time monitoring, data analysis, and optimized communication are essential. Potential applications include:
+
+- **Smart Surveillance:** Real-time facial recognition and tracking for enhanced security.
+- **Industrial Automation:** Monitoring and controlling industrial processes through IoT and AI.
+- **Predictive Maintenance:** Using data analysis to predict equipment failures and optimize maintenance schedules.
+- **Quality Control:** Automated inspection and analysis of products using computer vision.
+
+By integrating these technologies, the system provides a robust solution for enhancing operational efficiency and decision-making in industrial settings.
+
+## Contributing
+
+contributions are welcomed from the community. Please follow these steps to contribute:
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/your-feature`).
+3. Commit your changes (`git commit -am 'Add your feature'`).
+4. Push to the branch (`git push origin feature/your-feature`).
+5. Create a new Pull Request.
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+
+
