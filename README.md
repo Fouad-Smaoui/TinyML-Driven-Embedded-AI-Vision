@@ -25,6 +25,7 @@ Ensure you have the following installed:
 - Keras
 - NumPy
 - Pandas
+- Plotly
 - Streamlit
 - Arduino IDE or ESP-IDF for ESP32 programming
 
@@ -84,11 +85,11 @@ The Kalman filter script optimizes face tracking by predicting and correcting fa
 
 The ESP32 code configures WiFi, MQTT communication, and runs a FreeRTOS task to handle MQTT operations.
 
-### 5. Data Visualization using Streamlit
+### 5. Data Visualization using Streamlit & Plotly
 
 **Streamlit Application: `streamlit_app.py`**
 
-The Streamlit app provides an interactive interface for data analysis and visualization.
+The Streamlit app provides an interactive interface for data analysis and visualization. Plotly is used for creating interactive and dynamic visualizations.
 
 ## Industrial Context
 
