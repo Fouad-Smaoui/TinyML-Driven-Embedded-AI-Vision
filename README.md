@@ -65,7 +65,7 @@ Ensure you have the following installed:
 
 **Jupyter Notebook: `data_analysis.ipynb`**
 
-This notebook demonstrates data analysis on industrial sensor data. It includes data cleaning, statistical analysis, and visualization.
+This notebook demonstrates comprehensive data analysis on industrial sensor data using NumPy for numerical operations, Pandas for data manipulation, and Plotly for interactive visualizations. It includes exploratory data analysis (EDA), statistical experiments, and hypothesis testing to derive insights from sensor readings.
 
 ### 2. AI and Computer Vision using Keras and OpenCV
 
@@ -89,7 +89,7 @@ The ESP32 code configures WiFi, MQTT communication, and runs a FreeRTOS task to 
 
 **Streamlit Application: `streamlit_app.py`**
 
-The Streamlit app provides an interactive interface for data analysis and visualization. Plotly is used for creating interactive and dynamic visualizations.
+The Streamlit app provides an interactive interface for data analysis and visualization using Plotly for dynamic and engaging plots.
 
 ## Industrial Context
 
