@@ -67,11 +67,12 @@ Ensure you have the following installed:
 
 This notebook demonstrates comprehensive data analysis on industrial sensor data using NumPy for numerical operations, Pandas for data manipulation, and Plotly for interactive visualizations. It includes exploratory data analysis (EDA), statistical experiments, and hypothesis testing to derive insights from sensor readings.
 
-### 2. AI and Computer Vision using Keras and OpenCV
+### 2. AI and Computer Vision using Keras, Scikit and OpenCV
 
 **Flask Application: `app.py`**
 
-The Flask app captures video, detects faces, and recognizes facial features using a pre-trained Keras model. The results are displayed in real-time.
+The Flask app captures video, detects faces against known identity, recognizes facial features using a pre-trained Keras model and enhances accuracy through Scikit-Learn's PCA module. The results are displayed in real-time.
+
 
 ### 3. Kalman Filter for Optimization
 
