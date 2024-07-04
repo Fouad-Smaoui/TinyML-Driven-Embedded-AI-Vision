@@ -27,6 +27,7 @@ Ensure you have the following installed:
 - Pandas
 - Plotly
 - Streamlit
+- Scikit Learn
 - Arduino IDE or ESP-IDF for ESP32 programming
 
 ### Installation
@@ -78,7 +79,7 @@ The Flask app captures video, detects faces against known identity, recognizes f
 
 **Python Script: `kalman_filter.py`**
 
-The Kalman filter script optimizes face tracking by predicting and correcting face positions.
+The Kalman filter optimizes face tracking by predicting and smoothing the trajectory of detected faces, improving tracking accuracy and robustness under motion.
 
 ### 4. FreeRTOS on ESP32 with MQTT Communication Protocol
 

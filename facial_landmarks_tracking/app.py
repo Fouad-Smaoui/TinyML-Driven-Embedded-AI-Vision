@@ -66,6 +66,15 @@ def get_camera():
             # Detect faces using dlib's face detector
             faces = detector(gray)
             for face in faces:
+                # Predict the new face position using the Kalman filter
+                predicted = kf.predict()
+                
+                # Correct the Kalman filter based on detected face position
+                kf.correct(face.left() + (face.width() / 2), face.top() + (face.height() / 2))
+                
+                # Use the predicted face position for drawing and further processing
+                predicted_x, predicted_y = int(predicted[0]), int(predicted[1])
+                
                 # Detect facial landmarks using dlib's shape predictor
                 landmarks = predictor(gray, face)
                 # Draw facial landmarks
@@ -73,8 +82,9 @@ def get_camera():
                     x = landmarks.part(n).x
                     y = landmarks.part(n).y
                     cv2.circle(frame, (x, y), 1, (0, 0, 255), -1)
-                # Draw bounding box around detected face
-                cv2.rectangle(frame, (face.left(), face.top()), (face.right(), face.bottom()), (0, 255, 0), 2)
+                # Draw bounding box around detected face using predicted position
+                cv2.rectangle(frame, (predicted_x - (face.width() // 2), predicted_y - (face.height() // 2)),
+                              (predicted_x + (face.width() // 2), predicted_y + (face.height() // 2)), (0, 255, 0), 2)
                 face_region = frame[face.top():face.bottom(), face.left():face.right()]
                 '''
                 # uncomment for performing virtual try on :  

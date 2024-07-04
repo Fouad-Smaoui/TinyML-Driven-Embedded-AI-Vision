@@ -1,8 +1,26 @@
+# Flask web framework for building web applications
 Flask==2.0.2
+
+# OpenCV library for computer vision tasks
 opencv-python==4.5.3.56
+
+# Dlib library for facial detection and landmark prediction
 dlib==19.24.0
+
+# Keras deep learning framework for building and training models
 keras==2.6.0
+
+# NumPy for numerical operations on arrays and matrices
 numpy==1.21.2
+
+# Pandas for data manipulation and analysis
 pandas==1.3.3
+
+# Plotly for creating interactive plots and visualizations
 plotly==5.3.1
+
+# Streamlit for building interactive web applications for data science
 streamlit==1.3.0
+
+# Scikit-learn for machine learning tasks such as PCA and StandardScaler
+scikit-learn==1.0.1
