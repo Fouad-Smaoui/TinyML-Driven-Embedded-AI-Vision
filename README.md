@@ -28,6 +28,7 @@ Ensure you have the following installed:
 - Plotly
 - Streamlit
 - Scikit Learn
+- Tensorflow
 - Arduino IDE or ESP-IDF for ESP32 programming
 
 ### Installation
@@ -87,7 +88,15 @@ The Kalman filter optimizes face tracking by predicting and smoothing the trajec
 
 The ESP32 code configures WiFi, MQTT communication, and runs a FreeRTOS task to handle MQTT operations.
 
-### 5. Data Visualization using Streamlit & Plotly
+### 5. TinyML for On-Device Inference
+This project includes a TinyML component designed to enable efficient model inference on low-power devices such as the ESP32. By utilizing TensorFlow Lite, we can deploy machine learning models that run directly on the hardware, minimizing latency and reducing the need for cloud-based processing.
+
+Model Training and Conversion:
+A simple neural network is trained on the MNIST dataset for digit recognition. The trained model is converted to TensorFlow Lite format for compatibility with embedded devices.
+
+**TinyML Code : `train_and_convert_model.py`**
+
+### 6. Data Visualization using Streamlit & Plotly
 
 **Streamlit Application: `streamlit_app.py`**
 
@@ -101,6 +110,7 @@ This system is designed for industrial environments where real-time monitoring, 
 - **Industrial Automation:** Monitoring and controlling industrial processes through IoT and AI.
 - **Predictive Maintenance:** Using data analysis to predict equipment failures and optimize maintenance schedules.
 - **Quality Control:** Automated inspection and analysis of products using computer vision.
+- **Edge Computing with TinyML**: Enabling on-device inference using TensorFlow Lite, allowing for low-latency decision-making in environments with limited connectivity, such as remote industrial sites.
 
 By integrating these technologies, the system provides a robust solution for enhancing operational efficiency and decision-making in industrial settings.
 

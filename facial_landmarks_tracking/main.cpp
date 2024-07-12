@@ -2,6 +2,7 @@
 #include <PubSubClient.h>       // Include the PubSubClient library for MQTT communication
 #include <freertos/FreeRTOS.h>  // Include the FreeRTOS library for task management
 #include <freertos/task.h>      // Include the FreeRTOS task library
+#include <TensorFlowLite_ESP32.h> // Include the TensorFlow Lite library for ESP32
 
 // WiFi credentials
 const char* ssid = "your_SSID";
@@ -13,6 +14,17 @@ const char* mqtt_server = "your_MQTT_BROKER_IP";
 // Initialize WiFi and MQTT clients
 WiFiClient espClient;
 PubSubClient client(espClient);
+
+// TensorFlow Lite variables
+tflite::MicroErrorReporter tflErrorReporter;
+tflite::ErrorReporter* errorReporter = &tflErrorReporter;
+
+// Assuming we have a quantized model
+const tflite::Model* model = tflite::GetModel(your_model_data);
+tflite::MicroInterpreter* interpreter;
+TfLiteTensor* input;
+TfLiteTensor* output;
+uint8_t tensorArena[10 * 1024];
 
 // Function to connect to WiFi
 void setup_wifi() {
@@ -65,7 +77,7 @@ void reconnect() {
         // Attempt to connect
         if (client.connect("ESP32Client")) {
             Serial.println("connected");
-            client.subscribe("test/topic");
+            client.subscribe("facial/recognition");
         } else {
             Serial.print("failed, rc=");
             Serial.print(client.state());
@@ -84,7 +96,26 @@ void facialRecognitionTask(void * pvParameters) {
 
         // Handle MQTT client loop
         client.loop();
+
+        // Placeholder for TensorFlow Lite model inference
+        // Load input data
+        float input_data[] = { /* Your input data */ };
+        for (int i = 0; i < input->dims->data[1]; ++i) {
+            input->data.f[i] = input_data[i];
+        }
         
+        // Perform inference
+        if (interpreter->Invoke() != kTfLiteOk) {
+            errorReporter->Report("Inference failed");
+        }
+        
+        // Get the output
+        float output_value = output->data.f[0];
+        
+        // Publish the result to MQTT
+        String result = (output_value > 0.5) ? "Verified" : "Not Verified";
+        client.publish("facial/recognition", result.c_str());
+
         // Delay for 100 ms
         vTaskDelay(100 / portTICK_PERIOD_MS);
     }
@@ -95,6 +126,18 @@ void setup() {
     setup_wifi();
     client.setServer(mqtt_server, 1883);
     client.setCallback(callback);
+
+    // TensorFlow Lite setup
+    static tflite::AllOpsResolver resolver;
+    static tflite::MicroInterpreter static_interpreter(
+        model, resolver, tensorArena, sizeof(tensorArena), errorReporter);
+    interpreter = &static_interpreter;
+    interpreter->AllocateTensors();
+    input = interpreter->input(0);
+    output = interpreter->output(0);
+
+    // Create FreeRTOS task
+    xTaskCreate(facialRecognitionTask, "FacialRecognitionTask", 8192, NULL, 1, NULL);
 }
 // Main loop function
 void loop() {
