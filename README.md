@@ -10,7 +10,8 @@ This project consists of several interconnected components:
 2. **AI and Computer Vision using Keras and OpenCV**
 3. **Kalman Filter for Optimization**
 4. **FreeRTOS on ESP32 with MQTT Communication Protocol**
-5. **Data Visualization using Streamlit**
+5. **TinyML for On-Device Inference**
+6. **Data Visualization using Streamlit**
 
 
 ## Getting Started
