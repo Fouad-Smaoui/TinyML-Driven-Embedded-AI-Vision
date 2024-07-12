@@ -7,6 +7,7 @@ from keras.preprocessing import image
 from kalman_filter import KalmanFilter
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+import paho.mqtt.client as mqtt
 
 app = Flask(__name__)
 
@@ -30,9 +31,32 @@ kf = KalmanFilter()
 scaler = StandardScaler()
 pca = PCA(n_components=100)  # Number of principal components to retain
 
+# MQTT Client setup
+mqtt_client = mqtt.Client()
+
+# Define the callback function that will be called when a message is received on a subscribed topic
+def on_message(client, userdata, message):
+    # Print the received message and the topic it was received on
+    print(f"Received message '{str(message.payload.decode('utf-8'))}' on topic '{message.topic}'")
+
+# Set the on_message callback function for the MQTT client
+mqtt_client.on_message = on_message
+
+# Connect to the MQTT broker
+# Replace "your_MQTT_BROKER_IP" with the actual IP address of your MQTT broker
+mqtt_client.connect("your_MQTT_BROKER_IP", 1883, 60)
+
+# Subscribe to the topic "facial/recognition"
+# This means the client will receive messages published to this topic
+mqtt_client.subscribe("facial/recognition")
+
+# Start the MQTT client loop to process network traffic and dispatch callbacks
+# This runs in the background and handles reconnections and message processing
+mqtt_client.loop_start()
+
 # Function to perform face verification using the loaded Keras model
 def verify_face(face_img):
-    # Preprocess the face image: resize to input size of Keras model, normalize, and perform PCA    face_array = cv2.resize(face_img, (224, 224))  # Assuming input shape required by your model
+    # Preprocess the face image: resize to input size of Keras model, normalize, and perform PCA
     face_array = cv2.resize(face_img, (224, 224))  # Resize to match the input shape of the Keras model
     
     # Normalize pixel values and reshape for compatibility with StandardScaler

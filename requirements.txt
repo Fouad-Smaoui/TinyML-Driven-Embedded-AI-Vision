@@ -24,3 +24,6 @@ streamlit==1.3.0
 
 # Scikit-learn for machine learning tasks such as PCA and StandardScaler
 scikit-learn==1.0.1
+
+# TensorFlow library
+tensorflow==2.5.0
