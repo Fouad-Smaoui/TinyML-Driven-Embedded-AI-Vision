@@ -1,6 +1,6 @@
-# Real-Time Industrial Monitoring and Optimization System
+# TinyML-Driven-Embedded-AI-Vision
 
-This project integrates real-time video processing, data analysis, AI-based facial recognition, optimization using a Kalman filter, IoT communication with an ESP32 microcontroller, and data visualization using Streamlit. Designed for industrial applications, this system provides real-time monitoring, data analysis, and optimized communication to enhance operational efficiency and decision-making.
+This project integrates TinyML, embedded AI, and computer vision technologies to provide advanced solutions for real-time image processing and analysis on embedded systems. It features AI-based facial recognition, optimization through a Kalman filter, and IoT communication with an ESP32 microcontroller. Additionally, the system includes comprehensive data analysis and visualization capabilities using Streamlit. Designed for industrial applications, this system enhances operational efficiency and decision-making through real-time monitoring, on-device inference, and optimized communication.
 
 ## Project Overview
 
