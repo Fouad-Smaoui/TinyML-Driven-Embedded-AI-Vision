@@ -1,4 +1,5 @@
 # TinyML-Driven-Embedded-AI-Vision
+![Alt text](https://raw.githubusercontent.com/Fouad-Smaoui/TinyML-Driven-Embedded-AI-Vision/main/assets_task_01jv89egk5f01rbv8ajfcbv19t_1747256392_img_2.webp)
 
 This project integrates TinyML, embedded AI, and computer vision technologies to provide advanced solutions for real-time image processing and analysis on embedded systems. It features AI-based facial recognition, optimization through a Kalman filter, and IoT communication with an ESP32 microcontroller. Additionally, the system includes comprehensive data analysis and visualization capabilities using Streamlit. Designed for industrial applications, this system enhances operational efficiency and decision-making through real-time monitoring, on-device inference, and optimized communication.
 
