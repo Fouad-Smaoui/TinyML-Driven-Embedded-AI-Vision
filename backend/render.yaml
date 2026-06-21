@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: edgevision-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: EDGEVISION_CORS_ORIGINS
+        value: http://localhost:3000
+      - key: EDGEVISION_CORS_ALLOW_VERCEL_PREVIEWS
+        value: "true"

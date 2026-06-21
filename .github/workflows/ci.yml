@@ -1,9 +1,27 @@
-name: CI
+name: Perception CI
 
 on:
   push:
     branches: [main]
+    paths:
+      - "perception/**"
+      - "tests/**"
+      - "app.py"
+      - "enroll.py"
+      - "models/**"
+      - "requirements*.txt"
+      - "pyproject.toml"
+      - ".github/workflows/ci.yml"
   pull_request:
+    paths:
+      - "perception/**"
+      - "tests/**"
+      - "app.py"
+      - "enroll.py"
+      - "models/**"
+      - "requirements*.txt"
+      - "pyproject.toml"
+      - ".github/workflows/ci.yml"
 
 jobs:
   lint-and-test:
@@ -14,8 +32,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
 
-      # dlib needs a compiler + cmake; matches docker/app.Dockerfile.
+      # dlib needs a compiler + cmake; matches docker/app.Dockerfile. With the
+      # pip cache above, a cache hit reuses the already-built dlib wheel
+      # instead of recompiling it from source on every run.
       - name: Install system build dependencies
         run: sudo apt-get update && sudo apt-get install -y cmake
 
