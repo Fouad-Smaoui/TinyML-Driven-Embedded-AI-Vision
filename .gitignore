@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Environment / secrets
+.env
+
+# Downloaded model artifacts (fetched via models/download_models.py)
+models/*.dat
+models/*.onnx
+models/*.tflite
+
+# Enrolled identities (biometric data — never commit real embeddings)
+enrolled_faces.json
+
+# TinyML build artifacts
+tinyml/*.tflite
+tinyml/*.csv
+
+# PlatformIO
+firmware/.pio/
+firmware/include/secrets.h
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/

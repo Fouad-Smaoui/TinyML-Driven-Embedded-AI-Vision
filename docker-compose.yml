@@ -1,0 +1,41 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./docker/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/app.Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - MQTT_BROKER_HOST=mosquitto
+      - FLASK_HOST=0.0.0.0
+    depends_on:
+      - mosquitto
+    # Run `touch enrolled_faces.json` (or `python enroll.py --name you`)
+    # before `docker compose up` so this bind mount targets a file, not a
+    # directory Docker would otherwise create.
+    volumes:
+      - ./enrolled_faces.json:/app/enrolled_faces.json
+    # Webcam passthrough only works reliably on Linux hosts. On
+    # Windows/macOS, run app.py natively (`python app.py`) for camera
+    # access and point it at MQTT_BROKER_HOST=localhost instead; the
+    # dashboard + broker can still run in Docker.
+    devices:
+      - /dev/video0:/dev/video0
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: docker/dashboard.Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      - PERCEPTION_APP_URL=http://app:5000
+    depends_on:
+      - app

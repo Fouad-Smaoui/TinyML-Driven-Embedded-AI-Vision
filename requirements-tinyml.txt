@@ -1,0 +1,4 @@
+# Heavy, build-time-only dependencies for training/quantizing the on-device
+# blink classifier (tinyml/). NOT required to run the perception app or
+# dashboard — keeps the runtime Docker image lean.
+tensorflow>=2.16,<3.0
