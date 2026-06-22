@@ -10,11 +10,13 @@ browser — backed by a deeper Python/embedded research pipeline: dlib, ONNX
 embeddings, a from-scratch Kalman filter, MQTT, and a real TensorFlow Lite
 Micro model running on physical ESP32 hardware.**
 
+### [**Try the live demo →**](https://frontend-xi-seven-16.vercel.app/demo)
+
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Fouad-Smaoui/TinyML-Driven-Embedded-AI-Vision&root-directory=frontend&project-name=edgevision-ai&repository-name=edgevision-ai)
 
-No live URL is hosted by the maintainer (deployment needs an account, see
-[Deployment](#deployment)) — click the button above to deploy your own copy
-in about two minutes, or run it locally below. · [Architecture](docs/architecture.md) · [License](LICENSE)
+Deployed on Vercel (frontend) + Render (backend) — click the button above to
+deploy your own copy instead, or run it locally below.
+[Architecture](docs/architecture.md) · [License](LICENSE)
 
 ![Landing page](docs/screenshots/landing.png)
 
@@ -143,13 +145,15 @@ regenerate the on-device blink classifier from `tinyml/`.
 | Schema-enforced privacy | `backend/app/models.py` — `PingPayload` rejects any field beyond 4 numbers |
 
 ```bash
-curl https://<your-backend>/health
+curl https://edgevision-backend-86pa.onrender.com/health
 # {"status":"ok"}
 
-curl https://<your-backend>/status
+curl https://edgevision-backend-86pa.onrender.com/status
 # {"status":"ok","version":"0.1.0","uptime_seconds":1234.5,
 #  "ping_stats":{"avg_fps":29.8,"avg_inference_ms":11.2,...}}
 ```
+
+(That's the real, live backend for this deployment — first request after idle may take a few seconds while Render's free tier wakes it up.)
 
 ## Testing
 
