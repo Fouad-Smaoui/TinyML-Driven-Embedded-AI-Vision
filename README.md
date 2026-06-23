@@ -77,12 +77,116 @@ embedded pipeline and once in TypeScript for the instant browser demo.
 - CI for all three surfaces (Python perception, frontend, backend), each
   independently triggered only by changes to its own path
 
-## Architecture
+## System Architecture
 
-Full component, data-flow, deployment, and model-pipeline diagrams live in
-[docs/architecture.md](docs/architecture.md). In short: the two tracks share
-concepts, not runtime data — there is no edge between them in production,
-and the FastAPI backend never talks to the Flask app.
+EdgeVision AI is built around a hard real-time constraint: every stage from
+camera frame to actuation is budgeted in milliseconds, and the heaviest
+inference (the TFLite Micro blink classifier) runs **on the microcontroller
+itself**, not in the cloud. The diagrams below give the bird's-eye view;
+full component, data-flow, deployment, and model-pipeline diagrams live in
+[docs/architecture.md](docs/architecture.md).
+
+### High-level system architecture
+
+Two independent tracks, one set of real-time perception concepts —
+the browser track runs entirely client-side, the embedded track runs
+detection→tracking→embedding→MQTT→on-device inference end to end.
+
+```mermaid
+flowchart TD
+    subgraph Edge["Edge / Local — low-latency perception"]
+        Cam[("Camera input<br/>webcam / onboard sensor")]
+        Cam --> Pre["Preprocessing<br/>grayscale · landmark extraction"]
+        Pre --> Det["Detection & tracking<br/>dlib HOG + Kalman filter"]
+        Det --> Emb["Embedding & verification<br/>ONNX ArcFace, cosine similarity"]
+        Det --> EAR["Eye-aspect-ratio signal"]
+    end
+
+    subgraph TinyML["TinyML inference — on-device, sub-task offload"]
+        EAR --> Quant["Quantized TFLite Micro model<br/>INT8, &lt; 20 KB"]
+        Quant --> MCU["ESP32 (FreeRTOS)<br/>on-device inference"]
+        MCU --> Act[["Actuation<br/>LED / serial event"]]
+    end
+
+    subgraph Comms["Communication layer"]
+        Emb --> Pub["MQTT publisher"]
+        EAR --> Pub
+        Pub -->|publish| Broker[("Mosquitto broker")]
+        Broker -->|subscribe| MCU
+    end
+
+    subgraph Obs["Observability"]
+        Det --> Metrics["Latency / FPS metrics"]
+        Emb --> Metrics
+        Metrics --> Flask["Flask app + Streamlit dashboard"]
+    end
+
+    subgraph Browser["Browser track — zero-install demo"]
+        BCam[("Visitor webcam")] --> MP["MediaPipe FaceLandmarker<br/>WASM/WebGL, client-side"]
+        MP --> BKal["TS Kalman filter"]
+        BKal --> BMetrics["Perf metrics<br/>fps · inference_ms · tracking_ms"]
+        BMetrics -.->|"anonymous ping<br/>4 numbers only"| API["FastAPI backend<br/>/health · /status · /metrics"]
+    end
+```
+
+### Edge inference pipeline (TinyML flow)
+
+The on-device path is the part that actually has to fit in a
+microcontroller: a synthetic dataset trains a tiny dense classifier,
+which is quantized, converted to a C array, and compiled directly into
+firmware — no runtime model loading, no network dependency for inference.
+
+```mermaid
+flowchart LR
+    A["Synthetic EAR dataset<br/>tinyml/generate_synthetic_ear_dataset.py"] --> B["Train classifier<br/>Keras dense net"]
+    B --> C["INT8 quantization<br/>TFLite converter"]
+    C --> D["C-array codegen<br/>convert_to_c_array.py"]
+    D --> E["model_data.h<br/>compiled into firmware"]
+    E --> F["TFLite Micro interpreter<br/>ESP32 · FreeRTOS task"]
+
+    G[("Live EAR value<br/>via MQTT")] --> F
+    F -->|"&lt; 5 ms inference"| H{"Blink<br/>classified?"}
+    H -->|yes| I["Onboard LED toggle"]
+    H -->|no| J["Idle / next cycle"]
+```
+
+### Real-time processing loop
+
+Each captured frame moves through detection, tracking, and embedding
+on a fixed cadence; the MCU's inference loop runs independently and
+asynchronously off the MQTT feed, so a slow embedding never blocks
+the on-device classifier.
+
+```mermaid
+flowchart LR
+    F1["Frame N captured"] --> F2["Detect + landmark"]
+    F2 --> F3["Kalman predict/correct"]
+    F3 --> F4["Render overlay"]
+    F2 --> F5["Compute EAR"]
+    F5 --> F6["Publish over MQTT"]
+    F6 --> F7["ESP32 receives + infers"]
+    F7 --> F8["Actuate"]
+    F4 --> F9["Next frame"]
+    F9 -.-> F1
+```
+
+### Deployment architecture
+
+Production traffic (recruiter-facing) and the local embedded stack are
+fully isolated: no edge connects them at runtime, only shared design.
+
+```mermaid
+flowchart TB
+    subgraph Cloud["Cloud — Track A only"]
+        V["Vercel<br/>Next.js frontend"] -.->|"anonymous ping only"| R["Render<br/>FastAPI backend"]
+    end
+
+    subgraph LAN["Local network — Track B"]
+        Host["Docker host<br/>Flask + Streamlit + Mosquitto"]
+        Host <--> ESP["Physical ESP32<br/>TFLite Micro"]
+        Webcam[("USB webcam")] --> Host
+    end
+```
 
 ## Quick start — browser demo
 
